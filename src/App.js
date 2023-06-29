@@ -7,6 +7,8 @@ import { useContext } from 'react';
 import UserContext from "./storage/UserContext";
 import Home from './components/Home';
 import ViewGalleryPage from './components/ViewGalleryPage';
+import CreateNewGalleryPage from './components/CreateNewGalleryPage';
+import MyGalleriesPage from './components/MyGalleriesPage';
 
 
 function App() {
@@ -17,7 +19,8 @@ function App() {
       <Route path="/register" element={<Register />}></Route>
       <Route path="/login" element={<LogIn />}></Route>
       <Route path="/galleries/:id" element={<ViewGalleryPage />}></Route>
-      
+      <Route path="/create" element={<CreateNewGalleryPage/>}></Route>
+      <Route path="/edit-gallery/:id" element={<CreateNewGalleryPage />} ></Route>
     </Routes>
 
   );

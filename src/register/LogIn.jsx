@@ -69,7 +69,7 @@ const LogIn = () => {
         <button className="btn btn-primary w-100 py-2" type="submit">
           Log in
         </button>
-        <p className="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
+   
       </form>
     </div>
   );
