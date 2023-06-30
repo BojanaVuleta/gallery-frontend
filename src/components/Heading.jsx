@@ -26,7 +26,7 @@ const Heading = () => {
         <h1 className="fs-4 d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">Galleries app</h1>
       
         <ul className="nav nav-pills">
-          <li className="nav-item">
+          <li className="nav-item button-spacing">
             <Link
               to="/"
               className="btn btn-success"
@@ -38,7 +38,7 @@ const Heading = () => {
 
           {signedIn ? (
             <>
-              <li className="nav-item">
+              <li className="nav-item button-spacing">
                 <Link
                   to="/create"
                   className="btn btn-success"
@@ -47,7 +47,7 @@ const Heading = () => {
                   Create New Gallery
                 </Link>
               </li>{" "}
-              <li className="nav-item">
+              <li className="nav-item button-spacing">
                 <Link
                   to="/my-galleries"
                   className="btn btn-success"
@@ -56,7 +56,7 @@ const Heading = () => {
                   My Galleries
                 </Link>
               </li>{" "}
-              <li className="nav-item">
+              <li className="nav-item button-spacing">
                 <button
                   className="btn btn-danger"
                   type="submit"
@@ -68,7 +68,7 @@ const Heading = () => {
             </>
           ) : (
             <>
-              <li className="nav-item">
+              <li className="nav-item button-spacing">
                 <Link
                   to="/register"
                   className="btn btn-success"
@@ -77,7 +77,7 @@ const Heading = () => {
                   Register
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className="nav-item button-spacing">
                 <Link
                   to="/login"
                   className="btn btn-success"

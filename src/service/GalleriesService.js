@@ -1,7 +1,7 @@
 import { API } from "../shared/api";
 
-export const getGalleries = () => {
-  return API.get("/galleries");
+export const getGalleries = (page) => {
+  return API.get(`/galleries?page=${page}`);
 };
 
 export const addGallery = (
@@ -32,4 +32,19 @@ export const deleteGalleryById = (id) => {
   return API.delete(`/galleries/${id}`);
 };
 
+export const getCommentsByGalleryId = (galleryId) => {
+  return API.get(`/galleries/${galleryId}/comments`);
+};
 
+export const addComment = (
+  description,
+  gallery_id,
+  user_id,
+ 
+) => {
+  return API.post('/comments', {
+    description,
+    gallery_id,
+    user_id
+  });
+};

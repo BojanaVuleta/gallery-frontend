@@ -9,16 +9,22 @@ const LogIn = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const { signInUser } = useContext(UserContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    logIn(user.email, user.password).then(({ data }) => {
-      signInUser(data);
-      localStorage.setItem("access_token", data.authorisation.token);
-      navigate("/");
-    });
+  
+    logIn(user.email, user.password)
+      .then(({ data }) => {
+        signInUser(data);
+        localStorage.setItem("access_token", data.authorisation.token);
+        navigate("/");
+      })
+      .catch((error) => {
+        setError("Invalid email or password");
+      });
 
     setUser({
       email: "",
@@ -51,6 +57,7 @@ const LogIn = () => {
             name="email"
             value={user.email}
             onChange={handelInputChange}
+            required
           />
           <label htmlFor="floatingInput">Email address</label>
         </div>
@@ -63,6 +70,7 @@ const LogIn = () => {
             value={user.password}
             onChange={handelInputChange}
             placeholder="Password"
+            required
           />
           <label htmlFor="floatingPassword">Password</label>
         </div>

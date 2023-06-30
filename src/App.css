@@ -8,6 +8,11 @@
   text-align: center;
 }
 
+.button-spacing {
+  margin-right: 10px;
+}
+
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

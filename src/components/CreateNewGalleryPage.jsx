@@ -11,7 +11,7 @@ const CreateNewGalleryPage = () => {
   const [gallery, setGallery] = useState({
     name: "",
     description: "",
-    urls: [""]
+    urls: []
   });
 
   const { id } = useParams();
@@ -50,7 +50,7 @@ const CreateNewGalleryPage = () => {
       setGallery({
         name: "",
         description: "",
-        urls: [""],
+        urls: [],
       });
     }
 
