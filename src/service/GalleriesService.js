@@ -48,3 +48,7 @@ export const addComment = (
     user_id
   });
 };
+
+export const getAuthorGalleries = (id) => {
+  return API.get(`/authors/${id}`);
+};

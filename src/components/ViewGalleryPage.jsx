@@ -9,10 +9,15 @@ import { useContext } from "react";
 import { addComment } from "../service/GalleriesService";
 
 
+
 const ViewGalleryPage = () => {
   const [gallery, setGallery] = useState({});
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState({});
+  const [comment, setComment] = useState({
+    description: "",
+    user_id: "",
+    gallery_id: "",
+  });
   const { signedIn } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,8 +28,8 @@ const ViewGalleryPage = () => {
         setGallery(data);
       });
       getCommentsByGalleryId(id).then(({ data }) => {
-        setComments(data);
-        console.log(data);
+        setComments(data.comments);
+        console.log(data.comments);
       });
     }
   }, [id]);
@@ -37,17 +42,22 @@ const ViewGalleryPage = () => {
     }
   };
 
-  const handleAddComment = (userId) => {
-    if (newComment && userId) {
-      addComment(newComment, id, userId)
-        .then(({ data }) => {
-          setComments([...comments, data]);
-          setNewComment("");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setComment((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    addComment(comment.description, comment.user_id, comment.gallery_id).then(() => {
+      setComments([...comments, comment]);
+      setComment({
+        description: "",
+      });
+    });
   };
 
   return (
@@ -57,6 +67,7 @@ const ViewGalleryPage = () => {
         <div className="card-body">
 
           <h2 className="card-title">{gallery.name}</h2>
+          {/* <Link to={`authors/${gallery.user.id}`} > Author: {gallery.user.first_name} {gallery.user.last_name} </Link> */}
           <p className="card-text">Description: {gallery.description}</p>
           <Link className="btn btn-outline-warning button-spacing" to={`/edit-gallery/${gallery.id}`} >Edit</Link>
           <button className="btn btn-outline-danger" onClick={handleDeleteGallery}>
@@ -83,22 +94,21 @@ const ViewGalleryPage = () => {
       </div>
 
       {signedIn && (
-   <div className="form-floating"><form></form>
-   <textarea className="form-control"
-    //  value={newComment}
-     onChange={(e) => setNewComment(e.target.value)}
-     maxLength={1000}
-     placeholder="Enter your comment"
-   ></textarea>
-
-   <button className="btn btn-primary  " onClick={handleAddComment}>Add Comment</button>
-  
- </div>
-  )}
+          <div className="form-floating">
+            <form>
+              <textarea
+              onChange={handleInputChange}
+                className="form-control"
+                name="description"
+                placeholder="Enter your comment"
+                value={comment.description}
+                maxLength={1000}
+              ></textarea>
+              <button className="btn btn-primary" onClick={handleSubmit}>Add Comment</button>
+            </form>
+          </div>
+        )}
     </div>
-
-  );
-
-  
+  ); 
 };
 export default ViewGalleryPage;
