@@ -6,8 +6,8 @@ import Register from './register/Register';
 import Home from './components/Home';
 import ViewGalleryPage from './components/ViewGalleryPage';
 import CreateNewGalleryPage from './components/CreateNewGalleryPage';
-// import MyGalleriesPage from './components/MyGalleriesPage';
 import AuthorsGalleries from './components/AuthorsGalleries';
+import MyGalleries from './components/MyGalleriesPage';
 
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
       <Route path="/create" element={<CreateNewGalleryPage/>}></Route>
       <Route path="/edit-gallery/:id" element={<CreateNewGalleryPage />} ></Route>
       <Route path="/authors/:id" element={<AuthorsGalleries />} ></Route>
+      <Route path="/my-galleries" element={<MyGalleries />} ></Route>
     </Routes>
 
   );

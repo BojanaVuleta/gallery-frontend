@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import UserContext from "../storage/UserContext";
 import {
   addGallery,
   editGalleryById,
@@ -11,9 +12,9 @@ const CreateNewGalleryPage = () => {
   const [gallery, setGallery] = useState({
     name: "",
     description: "",
-    urls: []
+    urls: [""],
   });
-
+  const { user } = useContext(UserContext);
   const { id } = useParams();
 
   useEffect(() => {
@@ -39,14 +40,10 @@ const CreateNewGalleryPage = () => {
       return alert("At least one URL is required");
     }
 
-    if (gallery.urls.some(url => !isValidImageUrl(url))) {
-      return alert("Invalid URL format. Please make sure to enter a valid image URL ending with .png, .jpg, or .jpeg");
-    }
-
     if (id) {
       editGalleryById(id, gallery);
     } else {
-      addGallery(gallery.name, gallery.description, gallery.urls);
+      addGallery(gallery.name, gallery.description, gallery.urls, user.user.id);
       setGallery({
         name: "",
         description: "",
@@ -54,14 +51,16 @@ const CreateNewGalleryPage = () => {
       });
     }
 
-    navigate("/my-galleries");
+    navigate("/");
   };
 
   const isValidImageUrl = (url) => {
     const imageExtensions = [".png", ".jpg", ".jpeg"];
     const lowercasedUrl = url.toLowerCase();
 
-    return imageExtensions.some(extension => lowercasedUrl.endsWith(extension));
+    return imageExtensions.some((extension) =>
+      lowercasedUrl.endsWith(extension)
+    );
   };
 
   const handleInputChange = (event) => {
@@ -85,6 +84,13 @@ const CreateNewGalleryPage = () => {
   };
 
   const handleAddUrl = () => {
+    const lastUrl = gallery.urls[gallery.urls.length - 1];
+
+    if (!isValidImageUrl(lastUrl)) {
+      return alert(
+        "Invalid URL format. Please make sure to enter a valid image URL ending with .png, .jpg, or .jpeg"
+      );
+    }
     setGallery((prevState) => ({
       ...prevState,
       urls: [...prevState.urls, ""],
@@ -93,7 +99,7 @@ const CreateNewGalleryPage = () => {
 
   const handleRemoveUrl = (index) => {
     if (gallery.urls.length === 1) {
-      return; 
+      return;
     }
     setGallery((prevState) => {
       const updatedUrls = [...prevState.urls];
@@ -113,7 +119,7 @@ const CreateNewGalleryPage = () => {
     ) {
       return;
     }
-  
+
     setGallery((prevState) => {
       const updatedUrls = [...prevState.urls];
       const urlToMove = updatedUrls[currentIndex];
@@ -158,53 +164,59 @@ const CreateNewGalleryPage = () => {
         </div>
         <div className="mt-3">
           <label>Image URLs:</label>
-          {gallery.urls.map((url, index) => (
-            <div key={index}>
-              <input
-                value={url}
-                type="text"
-                className="form-control"
-                onChange={(event) => handleUrlChange(event, index)}
-                placeholder="URL"
-                required
-              />
-              <div className="mt-1">
-                <button
-                  className="btn btn-sm btn-danger me-2"
-                  onClick={() => handleRemoveUrl(index)}
-                >
-                  Remove
-                </button>
-                {index !== gallery.urls.length - 1 && (
-                  <button
-                    className="btn btn-sm btn-secondary"
-                    onClick={handleAddUrl}
-                  >
-                    Add Another URL
-                  </button>
-                  
-                )}
-                {index !== 0 && (
-        <button
-          className="btn btn-sm btn-secondary me-2"
-          onClick={() => handleMoveUrl(index, index - 1)}
-        >
-          Move Up
-        </button>
-      )}
-      {index !== gallery.urls.length - 1 && (
-        <button
-          className="btn btn-sm btn-secondary"
-          onClick={() => handleMoveUrl(index, index + 1)}
-        >
-          Move Down
-        </button>
-      )}
-              </div>
-            </div>
-          ))}
+          <ul>
+            {gallery.urls.map((url, index) => (
+              <li key={index}>
+                <div className="d-flex align-items-center mb-2">
+                  <input
+                    value={url}
+                    type="text"
+                    className="form-control me-2"
+                    onChange={(event) => handleUrlChange(event, index)}
+                    placeholder="URL"
+                    required
+                  />
+                  {index !== gallery.urls.length - 1 && (
+                    <>
+                      <button
+                        className="btn btn-sm btn-danger me-2"
+                        onClick={() => handleRemoveUrl(index)}
+                        type="button"
+                      >
+                        Remove
+                      </button>
+                      <button
+                        className="btn btn-sm btn-secondary me-2"
+                        onClick={() => handleMoveUrl(index, index - 1)}
+                        disabled={index === 0}
+                        type="button"
+                      >
+                        Move Up
+                      </button>
+
+                      <button
+                        className="btn btn-sm btn-secondary me-2"
+                        onClick={() => handleMoveUrl(index, index + 1)}
+                        disabled={index === gallery.urls.length - 2}
+                        type="button"
+                      >
+                        Move Down
+                      </button>
+                    </>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+          <button
+            className="d-block btn btn-sm btn-secondary"
+            onClick={handleAddUrl}
+            type="button" // to prevent form submission
+          >
+            Add Another URL
+          </button>
         </div>
-  
+
         <div>
           {id ? (
             <button

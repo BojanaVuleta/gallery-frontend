@@ -1,21 +1,43 @@
 import { useContext, useEffect, useState } from "react";
 import GalleryContext from "../storage/GalleryContext";
-import { getGalleries } from "../service/GalleriesService";
+import { getGalleries, filterGalleries } from "../service/GalleriesService";
 import { Link } from "react-router-dom";
 
 
 const Home = () => {
   const { galleries, updateGalleries} = useContext(GalleryContext);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [filterTerm, setFilterTerm] = useState("");
+  const [filteredGalleries, setFilteredGalleries] = useState([]);
 
   useEffect(() => {
     loadGalleries();
   }, [page]);
 
+  useEffect(() => {
+    if (filterTerm !== "") {
+      const filtered = filterGalleries(galleries, filterTerm);
+      setFilteredGalleries(filtered);
+    } else {
+      setFilteredGalleries(galleries);
+    }
+  }, [filterTerm, galleries]);
+
   const loadGalleries = () => {
     getGalleries(page).then(({ data }) => {
-      updateGalleries(data.data);
-      console.log(data)
+     
+      if (page === 1) {
+        updateGalleries(data.data);
+      } else {
+        updateGalleries((prevGalleries) => [...prevGalleries, ...data.data]);
+      }
+
+      if (data.current_page < data.last_page) {
+        setHasMore(true);
+      } else {
+        setHasMore(false);
+      }
     });
   };
 
@@ -23,40 +45,77 @@ const Home = () => {
     setPage(prevPage => prevPage + 1);
   };
 
+  const handleFilterChange = (e) => {
+    setFilterTerm(e.target.value);
+  };
+
+  const handleFilterSubmit = (e) => {
+    e.preventDefault();
+    loadGalleries();
+  };
+
   return (
     <div className="container">
-      {Array.isArray(galleries) && galleries.length > 0 ? (
+      <div className="my-4">
+        <form onSubmit={handleFilterSubmit}>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Unesite termin za filtriranje"
+            value={filterTerm}
+            onChange={handleFilterChange}
+          />
+          <button className="btn btn-primary mt-2" type="submit">
+            Filtriraj
+          </button>
+        </form>
+      </div>
+      {Array.isArray(filteredGalleries) && filteredGalleries.length > 0 ? (
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-          {galleries.map((gallery) => (
-            <div key={gallery.id} className="col m-5" style={{ width: "340px" }}>
-              <div className="card shadow-sm">
-                <div className="card-body bg-light border rounded border">         
-                <img src={gallery.urls[0]} alt="Gallery" />
-                  <Link
-                    className="btn btn-outline-warning"
-                    to={`galleries/${gallery.id}`}
-                  >
-                    <h2 className="card-text">{gallery.name}</h2>
-                  </Link>
-                 <Link to={`authors/${gallery.user.id}`} > Author: {gallery.user.first_name} {gallery.user.last_name} </Link>
-                  Created at: <p>{gallery.created_at}</p>
-                  
-                </div>
+          {filteredGalleries.map((gallery) => (
+          <div
+            key={gallery?.id}
+            className="col m-5"
+            style={{ width: "340px" }}
+          >
+            <div className="card shadow-sm">
+              <div className="card-body bg-light border rounded border">
+                {gallery.urls && gallery.urls.length > 0 ? (
+                  <img
+                    src={gallery.urls[0]}
+                    className="card-img-top"
+                    alt="Gallery"
+                  />
+                ) : (
+                  <p>No image available</p>
+                )}
+                <Link
+                  className="btn btn-outline-warning"
+                  to={`galleries/${gallery?.id}`}
+                >
+                  <h2 className="card-text">{gallery.name}</h2>
+                </Link>
+                <Link to={`authors/${gallery.user?.id}`}>
+                  {" "}
+                  Author: {gallery.user?.first_name} {gallery.user?.last_name}{" "}
+                </Link>
+                Created at: <p>{gallery.created_at}</p>
               </div>
             </div>
-          ))}
-        </div>
-      ) : (
-        <p>No galleries found.</p>
-      )}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p>No galleries found.</p>
+    )}
 
-      {Array.isArray(galleries) && galleries.length > 1 && (
-        <button className="btn btn-primary" onClick={loadMoreGalleries}>
-          Učitaj više
-        </button>
-      )}
-    </div>
-  );
+    {hasMore && Array.isArray(galleries) && galleries.length > 0 && (
+      <button className="btn btn-primary" onClick={loadMoreGalleries}>
+        Učitaj više
+      </button>
+    )}
+  </div>
+);
 };
 
 export default Home;

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import UserContext from "../storage/UserContext";
 import { logIn } from "../service/UserService";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,13 @@ const LogIn = () => {
   });
   const [error, setError] = useState("");
 
-  const { signInUser } = useContext(UserContext);
+  const { signInUser, signedIn } = useContext(UserContext);
+
+  useEffect(() => {
+    if (signedIn) {
+      navigate("/");
+    }
+  }, [signedIn, navigate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();

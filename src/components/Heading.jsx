@@ -26,12 +26,8 @@ const Heading = () => {
         <h1 className="fs-4 d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">Galleries app</h1>
       
         <ul className="nav nav-pills">
-          <li className="nav-item button-spacing">
-            <Link
-              to="/"
-              className="btn btn-success"
-              aria-current="page"
-            >
+        <li className="nav-item button-spacing">
+            <Link to="/" className="btn btn-success" aria-current="page">
               All Galleries
             </Link>
           </li>

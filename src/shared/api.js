@@ -13,19 +13,23 @@ API.interceptors.request.use(function (request) {
 });
 
 API.interceptors.response.use(
-    async function (response) {
-      return response;
-    },
-    async function (error) {
-      if (error.response.status === 401) {
-        const token = localStorage.getItem("access_token");
-        if (token && error.response.status === 401) {
-          const { data } = await API.post("/refresh");
-          localStorage.setItem("access_token", data.authorization.token);
-        }
-        return API(error.config);
-      } else {
-        return Promise.reject(error?.response || error);
+  async function (response) {
+    return response;
+  },
+  async function (error) {
+    const originalRequest = error.config;
+    if (
+      error.response.status === 401 &&
+      originalRequest.url !== "/login" &&
+      originalRequest.url !== "/refresh"
+    ) {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        const { data } = await API.post("/refresh");
+        localStorage.setItem("access_token", data.authorization.token);
+        return API(originalRequest);
       }
     }
-  );
+    return Promise.reject(error?.response || error);
+  }
+);

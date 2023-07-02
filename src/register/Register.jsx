@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { registerUser } from "../service/UserService";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../service/UserService";
@@ -7,7 +7,7 @@ import UserContext from "../storage/UserContext";
 const Register = () => {
   const [error, setError] = useState({ isActive: false, message: "" });
   const [checkbox, setCheckbox] = useState(false);
-  const { signInUser } = useContext(UserContext);
+  const { signInUser, signedIn } = useContext(UserContext);
   const navigate = useNavigate();
   const [user, setUser] = useState({
     first_name: "",
@@ -18,10 +18,14 @@ const Register = () => {
     emailVerified: true,
   });
 
+  useEffect(() => {
+    if (signedIn) {
+      navigate("/");
+    }
+  }, [signedIn, navigate]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const validEmail = /^[\w-]+(.[\w-]+)*@([\w-]+.)+[a-zA-Z]{2,7}$/;
-    const validPassword = /^(?=.*\d)(?=.*[a-z])[0-9a-z]{8,}$/;
 
     if (user.password !== user.password1) {
       setError({ isActive: true, message: "Passwords must match." });
@@ -30,13 +34,20 @@ const Register = () => {
         isActive: true,
         message: "You must Accept terms and conditions.",
       });
-    } else if (!validEmail.test(user.email)) {
+    } else if (
+      user.email.indexOf("@") === -1 ||
+      user.email.indexOf(".") === -1
+    ) {
       setError({ isActive: true, message: "Invalid email address." });
-    } else if (!validPassword.test(user.password)) {
+    } else if (
+      user.password.length < 8 ||
+      !user.password.split("").some((char) => !isNaN(char)) ||
+      !user.password.split("").some((char) => isNaN(char))
+    ) {
       setError({
         isActive: true,
         message:
-          "Password must be the same, at least 8 characters long, and contain at least 1 digit.",
+          "Password must be at least 8 characters long and contain at least 1 digit and 1 non-digit character.",
       });
     } else {
       registerUser(
