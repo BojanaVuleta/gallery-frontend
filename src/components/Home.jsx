@@ -65,9 +65,6 @@ const Home = () => {
             value={filterTerm}
             onChange={handleFilterChange}
           />
-          <button className="btn btn-primary mt-2" type="submit">
-            Filtriraj
-          </button>
         </form>
       </div>
       {Array.isArray(filteredGalleries) && filteredGalleries.length > 0 ? (
@@ -77,6 +74,7 @@ const Home = () => {
             key={gallery?.id}
             className="col m-5"
             style={{ width: "340px" }}
+            
           >
             <div className="card shadow-sm">
               <div className="card-body bg-light border rounded border">
@@ -90,15 +88,17 @@ const Home = () => {
                   <p>No image available</p>
                 )}
                 <Link
-                  className="btn btn-outline-warning"
+                  className="btn btn-outline-warning d-block"
                   to={`galleries/${gallery?.id}`}
                 >
-                  <h2 className="card-text">{gallery.name}</h2>
+                  <h2 className="card-text" style={{ color: "black"}}>{gallery.name}</h2>
                 </Link>
+                <div>
                 <Link to={`authors/${gallery.user?.id}`}>
                   {" "}
                   Author: {gallery.user?.first_name} {gallery.user?.last_name}{" "}
                 </Link>
+                </div>
                 Created at: <p>{gallery.created_at}</p>
               </div>
             </div>
@@ -110,7 +110,7 @@ const Home = () => {
     )}
 
     {hasMore && Array.isArray(galleries) && galleries.length > 0 && (
-      <button className="btn btn-primary" onClick={loadMoreGalleries}>
+      <button className="btn btn-secondary" onClick={loadMoreGalleries}>
         Učitaj više
       </button>
     )}

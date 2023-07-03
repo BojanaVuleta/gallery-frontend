@@ -77,13 +77,13 @@ const AuthorsGallery = () => {
         {Array.isArray(filteredGalleries)
           ? filteredGalleries.map((gallery, id) => (
               <div key={id} className="col m-5" style={{ width: "340px" }}>
-                <div className="card shadow-sm">
-                  <div className="card-body bg-light border rounded border">
+                <div className="card shadow-sm" >
+                  <div className="card-body bg-light border rounded border" >
                   <Link
-                  className="btn btn-outline-warning"
+                  className="btn btn-outline-warning d-block"
                   to={`/galleries/${gallery.id}`}
                 >
-                  <h2 className="card-text">{gallery.name}</h2>
+                  <h2 className="card-text" style={{ color: "black"}}>{gallery.name} </h2>
                 </Link>
                     <div className="mb-1 text-body-secondary">
                       description: {gallery.description}

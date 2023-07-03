@@ -6,6 +6,7 @@ import {
   editGalleryById,
   getGalleryById,
 } from "../service/GalleriesService";
+import { Link } from "react-router-dom";
 
 const CreateNewGalleryPage = () => {
   const navigate = useNavigate();
@@ -211,7 +212,7 @@ const CreateNewGalleryPage = () => {
           <button
             className="d-block btn btn-sm btn-secondary"
             onClick={handleAddUrl}
-            type="button" // to prevent form submission
+            type="button" 
           >
             Add Another URL
           </button>
@@ -235,6 +236,7 @@ const CreateNewGalleryPage = () => {
               Submit
             </button>
           )}
+          <Link to="/my-galleries"><button className="w-100 btn btn-lg btn-danger mt-3">Cancel</button></Link>
         </div>
       </form>
     </div>

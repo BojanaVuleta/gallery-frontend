@@ -26,6 +26,10 @@ export const deleteGalleryById = (id) => {
   return API.delete(`/galleries/${id}`);
 };
 
+export const deleteComById = (id) => {
+  return API.delete(`/comments/${id}`);
+};
+
 export const getCommentsByGalleryId = (galleryId) => {
   return API.get(`/galleries/${galleryId}/comments`);
 };
@@ -61,3 +65,9 @@ export const filterGalleries = (galleries, filterTerm) => {
     return isMatch;
   });
 };
+
+export const getUserGalleries = (userId, page) => {
+  return API.get(`/users/${userId}/galleries?page=${page}`);
+};
+
+

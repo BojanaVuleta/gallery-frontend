@@ -7,8 +7,8 @@ import Home from './components/Home';
 import ViewGalleryPage from './components/ViewGalleryPage';
 import CreateNewGalleryPage from './components/CreateNewGalleryPage';
 import AuthorsGalleries from './components/AuthorsGalleries';
-import MyGalleries from './components/MyGalleriesPage';
-
+import MyGalleriesPage from './components/MyGalleriesPage';
+import ProtectedRoute from "./shared/ProtectedRoute";
 
 function App() {
   
@@ -21,7 +21,7 @@ function App() {
       <Route path="/create" element={<CreateNewGalleryPage/>}></Route>
       <Route path="/edit-gallery/:id" element={<CreateNewGalleryPage />} ></Route>
       <Route path="/authors/:id" element={<AuthorsGalleries />} ></Route>
-      <Route path="/my-galleries" element={<MyGalleries />} ></Route>
+      <Route path="/my-galleries" element={<ProtectedRoute><MyGalleriesPage /></ProtectedRoute>} ></Route>
     </Routes>
 
   );

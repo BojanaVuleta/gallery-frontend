@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext , useEffect} from "react";
 import UserContext from "../storage/UserContext";
 import { logIn } from "../service/UserService";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ const LogIn = () => {
 
   const { signInUser, signedIn } = useContext(UserContext);
 
-  useEffect(() => {
+    useEffect(() => {
     if (signedIn) {
       navigate("/");
     }

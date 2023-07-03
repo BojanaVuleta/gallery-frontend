@@ -27,3 +27,7 @@ export const registerUser = (first_name, last_name, email, password) => {
   export const getUserById = (id) => {
     return API.get(`/users/${id}`);
   };
+
+  export const getAuthenticatedUser = () => {
+    return API.get("/me");
+  };
