@@ -35,7 +35,7 @@ const UserProvider = ({ children }) => {
   const signOutUser = () => {
     setUserState({});
     setIsUsersignedIn(false);
-    localStorage.removeItem("access_token");
+    
   };
 
   const userContext = {
