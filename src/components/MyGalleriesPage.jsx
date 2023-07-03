@@ -74,7 +74,7 @@ const MyGalleriesPage = () => {
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           {filteredGalleries.map((gallery) => (
             <div
-              key={gallery.id}
+              key={gallery?.id}
               className="col m-5"
               style={{ width: "340px" }}
             >

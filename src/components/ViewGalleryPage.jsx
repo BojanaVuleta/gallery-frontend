@@ -116,7 +116,7 @@ const ViewGalleryPage = () => {
                 ))}
             </Carousel>
         
-          <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+          <div id="carouselExampleSlidesOnly" className="carousel slide" data-ride="carousel">
 </div>
           
 {signedIn && gallery.user_id === user.user?.id && (
